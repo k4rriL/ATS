@@ -1,8 +1,5 @@
 package junction.senseit;
 
-import android.graphics.Point;
-
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,7 +13,7 @@ import org.json.*;
  * Created by Karri on 26.11.2016.
  */
 
-public class Ticket {
+public class TicketInformation {
     public int ID;
     public int priority;
     public String description;
@@ -29,7 +26,7 @@ public class Ticket {
 
     DateFormat df = new SimpleDateFormat("kk:mm:ss MM dd  yyyy", Locale.ENGLISH);
 
-    public Ticket(int ID, int priority, String description, String address, String floor, String room, String startTime){
+    public TicketInformation(int ID, int priority, String description, String address, String floor, String room, String startTime){
         this.ID=ID;
         this.priority=priority;
         this.description=description;
@@ -49,7 +46,7 @@ public class Ticket {
         }
     }
 
-    public Ticket(int ID, int priority, String description, String address, String floor, String room, String startTime, String deadline){
+    public TicketInformation(int ID, int priority, String description, String address, String floor, String room, String startTime, String deadline){
         this.ID=ID;
         this.priority=priority;
         this.description=description;
@@ -65,7 +62,7 @@ public class Ticket {
         }
     }
 
-    public Ticket(int ID, int priority, String description, String address, String floor, String room, String startTime, States state){
+    public TicketInformation(int ID, int priority, String description, String address, String floor, String room, String startTime, States state){
         this.ID=ID;
         this.priority=priority;
         this.description=description;
@@ -85,7 +82,7 @@ public class Ticket {
         }
     }
 
-    public Ticket(int ID, int priority, String description, String address, String floor, String room, String startTime, String deadline, States state){
+    public TicketInformation(int ID, int priority, String description, String address, String floor, String room, String startTime, String deadline, States state){
         this.ID=ID;
         this.priority=priority;
         this.description=description;
@@ -103,7 +100,7 @@ public class Ticket {
 
     }
 
-    Ticket createTicketFromJSON(JSONObject data){
+    TicketInformation createTicketFromJSON(JSONObject data){
         int ID = 0;
         int priority = 0;
         String description = "";
@@ -136,21 +133,21 @@ public class Ticket {
             System.out.println(ex.getMessage() + "");
         }
 
-        Ticket ticket;
+        TicketInformation ticketInformation;
         if (deadline.equals("") && state.equals("")){
-            ticket =  new Ticket(ID, priority, description, address, floor, room, startTime);
+            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime);
         }
         else if (deadline.equals("")){
-            ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, parseState(state));
+            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, parseState(state));
         }
         else if (state.equals("")){
-            ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, deadline);
+            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline);
         }
         else{
-            ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, deadline, parseState(state));
+            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline, parseState(state));
         }
 
-        return ticket;
+        return ticketInformation;
     }
 
     public long timeToDeadline() {

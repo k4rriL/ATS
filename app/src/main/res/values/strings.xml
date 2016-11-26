@@ -9,4 +9,12 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
+    <string name="str_arrow_desc">Arrow indicating screen redirection</string>
+    <string name="str_mark_resolved">Resolved</string>
+    <string name="str_raise_issue">Raise issue</string>
+    <string name="str_accept_task">Accept</string>
+    <string name="str_task_information">Task Information</string>
+    <string name="str_area_location">Location Information</string>
+    <string name="str_view_on_map">view on map</string>
+
 </resources>
