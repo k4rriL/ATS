@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class TasksListerActivity extends AppCompatActivity {
 
     private ListView listView;
-    private TaskListAdapter listAdapter;
+    private TaskListAdapter listAdapter = null;
 
 
     @Override
@@ -24,7 +24,6 @@ public class TasksListerActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_lister);
-
 
         listView = (ListView) findViewById(R.id.tasks_list);
         GetTicketsTask task =  new GetTicketsTask();
