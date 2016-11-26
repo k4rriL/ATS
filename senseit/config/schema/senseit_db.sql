@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 26, 2016 at 04:26 PM
+-- Generation Time: Nov 26, 2016 at 10:44 PM
 -- Server version: 5.7.15-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -36,6 +36,14 @@ CREATE TABLE `activities` (
   `quantity_of_workers` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `activities`
+--
+
+INSERT INTO `activities` (`id`, `activity`, `role_id`, `default_priority`, `quantity_of_workers`) VALUES
+(1, 'Clean the floor', 1, 1, 1),
+(2, 'Refill coffee', 1, 2, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -46,6 +54,14 @@ CREATE TABLE `roles` (
   `id` int(11) NOT NULL,
   `roleName` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`id`, `roleName`) VALUES
+(1, 'Janitor'),
+(2, 'Supplier');
 
 -- --------------------------------------------------------
 
@@ -59,6 +75,14 @@ CREATE TABLE `tickets` (
   `parent_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`id`, `activity_id`, `parent_id`) VALUES
+(2, 1, NULL),
+(3, 2, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -70,15 +94,16 @@ CREATE TABLE `users` (
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
+  `modified` datetime DEFAULT NULL,
+  `active` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `created`, `modified`) VALUES
-(2, 'myuser', '$2y$10$yJciRNhPb8XugmRxFsH6z.DetHfwy9dov/KHSGQezaJy3.F8JEgfy', '2016-11-26 14:11:51', '2016-11-26 14:11:51');
+INSERT INTO `users` (`id`, `username`, `password`, `created`, `modified`, `active`) VALUES
+(2, 'myuser', '$2y$10$yJciRNhPb8XugmRxFsH6z.DetHfwy9dov/KHSGQezaJy3.F8JEgfy', '2016-11-26 14:11:51', '2016-11-26 14:11:51', 1);
 
 -- --------------------------------------------------------
 
@@ -91,9 +116,16 @@ CREATE TABLE `workers` (
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `worker_id` int(11) DEFAULT NULL,
-  `role_id` int(11) NOT NULL,
-  `password` varchar(100) NOT NULL
+  `role_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `workers`
+--
+
+INSERT INTO `workers` (`id`, `name`, `email`, `worker_id`, `role_id`) VALUES
+(1, 'Matti', 'matti@iss.com', NULL, 1),
+(2, 'Anna', 'anna@iss.com', NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -111,6 +143,14 @@ CREATE TABLE `workers_tickets` (
   `ticket_id` int(11) NOT NULL,
   `worker_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `workers_tickets`
+--
+
+INSERT INTO `workers_tickets` (`id`, `status`, `priority`, `assigned_time`, `resolved_time`, `creation_time`, `ticket_id`, `worker_id`) VALUES
+(2, '0', 1, NULL, NULL, '2016-11-26 15:06:47', 2, 1),
+(3, '0', 1, NULL, NULL, '2016-11-26 15:06:47', 3, 2);
 
 --
 -- Indexes for dumped tables
@@ -167,17 +207,17 @@ ALTER TABLE `workers_tickets`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -187,12 +227,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `workers`
 --
 ALTER TABLE `workers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `workers_tickets`
 --
 ALTER TABLE `workers_tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Constraints for dumped tables
 --
