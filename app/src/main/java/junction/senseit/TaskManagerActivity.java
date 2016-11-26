@@ -1,12 +1,13 @@
 package junction.senseit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class TaskManager extends AppCompatActivity {
+public class TaskManagerActivity extends AppCompatActivity {
 
     private TextView tv_taskDescription;
     private TextView tv_roomNumber;
@@ -16,6 +17,8 @@ public class TaskManager extends AppCompatActivity {
     private Button btn_raiseIssue;
     private Button btn_acceptTask;
     private Button btn_markResolved;
+
+    TicketInformation ticketInformation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,30 @@ public class TaskManager extends AppCompatActivity {
         btn_acceptTask = (Button) findViewById(R.id.btn_accept_task);
         btn_markResolved = (Button) findViewById(R.id.btn_mark_resolved);
 
+        // Get the intent object and extract the data
+        Intent intent = getIntent();
+        initialize( (TicketParcelable) intent.getParcelableExtra("selected_ticket"));
         attachListeners();
+    }
+
+    private void initialize(TicketParcelable ticketParcObj) {
+
+        ticketInformation = new TicketInformation(
+                ticketParcObj.getTicketID(),
+                ticketParcObj.getTicketPriority(),
+                ticketParcObj.getTicketDescription(),
+                ticketParcObj.getLocationAddress(),
+                ticketParcObj.getFloor(),
+                ticketParcObj.getRoomNumber(),
+                ticketParcObj.getStartTime(),
+                ticketParcObj.getDeadline(),
+                ticketParcObj.getTicketState()
+        );
+
+        tv_taskDescription.setText(ticketInformation.getTicketDescription());
+        tv_floorInformation.setText(ticketInformation.getFloor());
+        tv_roomNumber.setText(ticketInformation.getRoomNumber());
+        tv_location.setText(ticketInformation.getLocationAddress());
     }
 
     private void attachListeners() {

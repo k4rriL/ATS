@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TasksListerActivity" />
-        <activity android:name=".TaskManager" />
+        <activity android:name=".TaskManagerActivity" />
         <activity android:name=".TaskListItem" />
     </application>
     <service
