@@ -34,13 +34,13 @@ class ProcessedItemInfo {
 class TaskListAdapter extends BaseAdapter {
 
     private Activity parentActivity;
-    private ArrayList<ProcessedItemInfo> processedHistoryData;
+    private ArrayList<TicketInformation> ticketInformatios;
     private static LayoutInflater inflater = null;
 
-    TaskListAdapter(Activity parent, ArrayList<ProcessedItemInfo> data) {
+    TaskListAdapter(Activity parent, ArrayList<TicketInformation> data) {
 
         parentActivity = parent;
-        processedHistoryData = data;
+        ticketInformatios = data;
         inflater = (LayoutInflater)parentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -52,7 +52,7 @@ class TaskListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return processedHistoryData.size();
+        return ticketInformatios.size();
     }
 
     /**
@@ -65,7 +65,7 @@ class TaskListAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        return processedHistoryData.get(position);
+        return ticketInformatios.get(position);
     }
 
     /**
@@ -111,7 +111,7 @@ class TaskListAdapter extends BaseAdapter {
         TextView tv_taskPreview = (TextView) view.findViewById(R.id.tv_task_desc_preview);  // Concise display text
         ImageView img_arrow = (ImageView)view.findViewById(R.id.img_arrow);                 // indicator image
 
-        ProcessedItemInfo item = processedHistoryData.get(position);
+        TicketInformation item = ticketInformatios.get(position);
 
         // Set all the values into the list item
        /* Drawable image = new BitmapDrawable(parentActivity.getResources(), item.thumbnailImage);

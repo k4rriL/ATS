@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            boolean status = false;
+            boolean status = true;
 
            /* // Checks if the network connection is available
             if( ((BackendConnectionHelper) getApplication()).isNetworkAvailable() ) {
