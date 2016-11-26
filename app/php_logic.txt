@@ -1,0 +1,39 @@
+	
+	
+	//index is priority, unit is hours
+	$deadlines = array(0, 5, 10, 24, 72, 168, 336);
+	$request = array(x, y, z, floor, activity, time);
+	$priority = activities(activity).priority;
+	$deadline = deadlines[priority];
+	
+	$people <array<id>> = Query from db: PEOPLE WHOSE ROLE HAS $activity
+
+	locations = array();
+	foreach($people as $id) {
+		//GetLocation returns array(x,y,z,floor)
+		array_push($locations, getLocation($id));	
+	}
+	$distances=array();
+	for( $i=0; $i < locations.length(); i++){
+		$distances[getDistance($locations[i])] = $i; 
+	}	
+	ksort($distances);
+	return $people[reset($distances)];
+	
+	add request to candidate's database
+
+	function getLocation($id){
+		request URL from api
+		$json = parse the location from json response
+		$x =
+		$y = 
+		$z =
+		$floor = 
+		return array($x,$y,$z,$floor)
+	}
+	
+	getDistance($x,$y,$z){
+		return sqrt(($x-request[0])**2+($y-request[1])**2+($z-request[2])**2);
+	}
+
+

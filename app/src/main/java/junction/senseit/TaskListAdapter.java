@@ -6,9 +6,6 @@ package junction.senseit;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,25 +19,16 @@ import java.util.ArrayList;
  * Created by Rakesh on 11/16/2016
  */
 
-class ProcessedItemInfo {
-
-    String imageID;
-    String imageName;
-    String creationTimestamp;
-    Bitmap thumbnailImage;
-    String imageText;
-}
-
 class TaskListAdapter extends BaseAdapter {
 
     private Activity parentActivity;
-    private ArrayList<TicketInformation> ticketInformatios;
+    private ArrayList<TicketInformation> arrTicketInfo;
     private static LayoutInflater inflater = null;
 
     TaskListAdapter(Activity parent, ArrayList<TicketInformation> data) {
 
         parentActivity = parent;
-        ticketInformatios = data;
+        arrTicketInfo = data;
         inflater = (LayoutInflater)parentActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -52,7 +40,7 @@ class TaskListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
 
-        return ticketInformatios.size();
+        return arrTicketInfo.size();
     }
 
     /**
@@ -65,7 +53,7 @@ class TaskListAdapter extends BaseAdapter {
     @Override
     public Object getItem(int position) {
 
-        return ticketInformatios.get(position);
+        return arrTicketInfo.get(position);
     }
 
     /**
@@ -111,25 +99,23 @@ class TaskListAdapter extends BaseAdapter {
         TextView tv_taskPreview = (TextView) view.findViewById(R.id.tv_task_desc_preview);  // Concise display text
         ImageView img_arrow = (ImageView)view.findViewById(R.id.img_arrow);                 // indicator image
 
-        TicketInformation item = ticketInformatios.get(position);
+        TicketInformation item = arrTicketInfo.get(position);
 
         // Set all the values into the list item
-       /* Drawable image = new BitmapDrawable(parentActivity.getResources(), item.thumbnailImage);
-        img_thumbnail.setBackground(image);
+        tv_taskTitle.setText( item.getTicketID().toString() );
 
         // Set first 256 characters as preview text, if less set completely
         String previewText;
-        if(item.imageText.length() < 256) {
+        if(item.getTicketDescription().length() < 25) {
 
-            previewText = item.imageText;
+            previewText = item.getTicketDescription();
         } else {
 
-            previewText = item.imageText.substring(0, 256);
+            previewText = item.getTicketDescription().substring(0, 25);
         }
-        tv_taskTitle.setText(previewText);
+        tv_taskPreview.setText(previewText);
 
-        img_arrow.setImageResource(R.mipmap.ic_arrow);
-*/
+        img_arrow.setImageResource(R.mipmap.ic_right_arrow);
         return view;
     }
 }
