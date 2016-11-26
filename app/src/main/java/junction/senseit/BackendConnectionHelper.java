@@ -49,27 +49,7 @@ import javax.net.ssl.TrustManagerFactory;
  * Created by Rakesh on 10/14/2016
  */
 
-/**
- *  This is the structure returned by the server after submitting the image
- */
-class ImageInformation {
 
-    String imageID;
-    String imageName;
-    String creationTimestamp;
-    String operationStatus;
-    String imageText;
-}
-
-/**
- * This structure holds the statistics data and is used for internal communications
- */
-class ImageProcessingStats {
-
-    String imageText;
-    long processingTime;
-    long dataExchangedInBytes;
-}
 
 public class BackendConnectionHelper extends Application {
 
@@ -343,7 +323,7 @@ public class BackendConnectionHelper extends Application {
 
         return bAuthenticated;
     }
-
+    /*
     public ArrayList<ImageInformation> getHistory() {
 
         // List of applications to return to the caller
@@ -466,15 +446,15 @@ public class BackendConnectionHelper extends Application {
             ContentBody imageBody = new FileBody(file, "image/jpeg");
             entity.addPart("file", imageBody );
 
-               /* Bitmap bitmap = BitmapFactory.decode
+                Bitmap bitmap = BitmapFactory.decode
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
                 ByteArrayBody bab = new ByteArrayBody( bos.toByteArray(), ("img" + index + ".jpg") );
-                entity.addPart( ("file" + index), bab); */
+                entity.addPart( ("file" + index), bab);
 
             // Initialize URL object and Connect to the URL
-            URL url = new URL(post_images_url);
-            urlConnection = (HttpsURLConnection) url.openConnection();
+           // URL url = new URL(post_images_url);
+            //urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
             urlConnection.setSSLSocketFactory(m_sslSocketFactory);
@@ -621,7 +601,7 @@ public class BackendConnectionHelper extends Application {
         processingStats.processingTime = (endTime - startTime);
 
         return processingStats;
-    }
+    }*/
 }
 
 

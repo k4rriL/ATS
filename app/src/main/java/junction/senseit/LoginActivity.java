@@ -175,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
             boolean status = true;
 
-           /* // Checks if the network connection is available
+            // Checks if the network connection is available
             if( ((BackendConnectionHelper) getApplication()).isNetworkAvailable() ) {
 
                 // Construct the ssl socket and then parse the backend IP file to form the URLs
@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
 
                 Toast.makeText(getApplicationContext(), "Failed to connect to backend", Toast.LENGTH_LONG).show();
-            }*/
+            }
 
             return status;
         }

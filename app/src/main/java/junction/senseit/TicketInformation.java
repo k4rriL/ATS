@@ -100,55 +100,7 @@ public class TicketInformation {
 
     }
 
-    TicketInformation createTicketFromJSON(JSONObject data){
-        int ID = 0;
-        int priority = 0;
-        String description = "";
-        String startTime="";
-        String deadline="";
-        String state="";
-        String address="";
-        String floor="";
-        String room="";
 
-        try{
-            ID = data.getInt("ID");
-            priority = data.getInt("priority");
-            description = data.getString("description");
-            startTime = data.getString("startTime");
-        }
-            catch (JSONException ex) {
-
-                System.out.println(ex.getMessage() + " Didnt get the required parameters");
-            }
-        try {
-            deadline = data.getString("deadline");
-        } catch (JSONException ex){
-            System.out.println(ex.getMessage() + "");
-        }
-        try {
-            state = data.getString("state");
-        } catch (JSONException ex){
-            state = "";
-            System.out.println(ex.getMessage() + "");
-        }
-
-        TicketInformation ticketInformation;
-        if (deadline.equals("") && state.equals("")){
-            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime);
-        }
-        else if (deadline.equals("")){
-            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, parseState(state));
-        }
-        else if (state.equals("")){
-            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline);
-        }
-        else{
-            ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline, parseState(state));
-        }
-
-        return ticketInformation;
-    }
 
     public long timeToDeadline() {
         return getDateDiff(deadline, new Date(), TimeUnit.HOURS);
@@ -158,22 +110,6 @@ public class TicketInformation {
         long diffInMillies = date2.getTime() - date1.getTime();
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
-
-
-
-
-
-    public States parseState(String state) {
-        if (state.equals("not started")) return States.NOT_STARTED;
-        else if (state.equals("in progress")) return States.IN_PROGRESS;
-        else if (state.equals("ready")) return States.READY;
-        else if (state.equals("problem")) return States.PROBLEM;
-        else return States.ON_THE_WAY;
-    }
-
-
-
-
 
     enum States{
         NOT_STARTED, READY, IN_PROGRESS,PROBLEM,ON_THE_WAY
