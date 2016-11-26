@@ -24,7 +24,7 @@ public class TicketInformation {
     public String floor;
     public String room;
 
-    DateFormat df = new SimpleDateFormat("kk:mm:ss MM dd  yyyy", Locale.ENGLISH);
+    DateFormat df = new SimpleDateFormat("kk:mm:ss MM dd yyyy", Locale.ENGLISH);
 
     public TicketInformation(int ID, int priority, String description, String address, String floor, String room, String startTime){
         this.ID=ID;

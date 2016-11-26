@@ -15,13 +15,12 @@
 	}
 	$distances=array();
 	for( $i=0; $i < locations.length(); i++){
-		$distances[getDistance($locations[i])] = $i;
+		$distances[getDistance($locations[i])] = $i; 
 	}	
 	ksort($distances);
 	return $people[reset($distances)];
 	
 	add request to candidate's database
-	
 
 	function getLocation($id){
 		request URL from api

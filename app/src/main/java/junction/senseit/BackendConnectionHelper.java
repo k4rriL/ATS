@@ -45,12 +45,6 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-/**
- * Created by Rakesh on 10/14/2016
- */
-
-
-
 public class BackendConnectionHelper extends Application {
 
     private static final String TAG = "BackendConnectionHelper";

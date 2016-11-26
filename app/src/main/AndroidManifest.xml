@@ -19,5 +19,9 @@
         <activity android:name=".TaskManager" />
         <activity android:name=".TaskListItem" />
     </application>
+    <service
+        android:name="com.android.yourpackagename.TimerService"
+        android:process=":TimerService" >
+    </service>
 
 </manifest>
