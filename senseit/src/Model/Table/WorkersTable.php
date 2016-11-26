@@ -77,10 +77,6 @@ class WorkersTable extends Table
             ->requirePresence('email', 'create')
             ->notEmpty('email');
 
-        $validator
-            ->requirePresence('password', 'create')
-            ->notEmpty('password');
-
         return $validator;
     }
 

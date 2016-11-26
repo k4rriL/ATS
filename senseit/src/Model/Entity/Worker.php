@@ -11,7 +11,6 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property int $worker_id
  * @property int $role_id
- * @property string $password
  *
  * @property \App\Model\Entity\Worker[] $workers
  * @property \App\Model\Entity\Role $role
@@ -32,14 +31,5 @@ class Worker extends Entity
     protected $_accessible = [
         '*' => true,
         'id' => false
-    ];
-
-    /**
-     * Fields that are excluded from JSON versions of the entity.
-     *
-     * @var array
-     */
-    protected $_hidden = [
-        'password'
     ];
 }

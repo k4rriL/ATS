@@ -19,7 +19,6 @@
             echo $this->Form->input('email');
             echo $this->Form->input('worker_id');
             echo $this->Form->input('role_id', ['options' => $roles]);
-            echo $this->Form->input('password');
             echo $this->Form->input('tickets._ids', ['options' => $tickets]);
         ?>
     </fieldset>

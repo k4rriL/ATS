@@ -17,6 +17,8 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
+use \Crud\Controller\ControllerTrait;
+
 /**
  * Application Controller
  *
@@ -27,6 +29,23 @@ use Cake\Event\Event;
  */
 class AppController extends Controller
 {
+	
+	    public $components = [
+        'Crud.Crud' => [
+            'actions' => [
+                'Crud.Index',
+                'Crud.View',
+                'Crud.Add',
+                'Crud.Edit',
+                'Crud.Delete'
+            ]
+        ]
+    ];
+    
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow(['api']);
+    }
 
     /**
      * Initialization hook method.
@@ -53,6 +72,7 @@ class AppController extends Controller
             ]
         ]);
     }
+    
 
     /**
      * Before render callback.

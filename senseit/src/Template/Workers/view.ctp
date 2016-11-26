@@ -29,10 +29,6 @@
             <td><?= $worker->has('role') ? $this->Html->link($worker->role->id, ['controller' => 'Roles', 'action' => 'view', $worker->role->id]) : '' ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Password') ?></th>
-            <td><?= h($worker->password) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($worker->id) ?></td>
         </tr>
@@ -51,7 +47,6 @@
                 <th scope="col"><?= __('Email') ?></th>
                 <th scope="col"><?= __('Worker Id') ?></th>
                 <th scope="col"><?= __('Role Id') ?></th>
-                <th scope="col"><?= __('Password') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($worker->workers as $workers): ?>
@@ -61,7 +56,6 @@
                 <td><?= h($workers->email) ?></td>
                 <td><?= h($workers->worker_id) ?></td>
                 <td><?= h($workers->role_id) ?></td>
-                <td><?= h($workers->password) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Workers', 'action' => 'view', $workers->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Workers', 'action' => 'edit', $workers->id]) ?>
