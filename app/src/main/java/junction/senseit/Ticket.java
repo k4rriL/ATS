@@ -127,7 +127,6 @@ public class Ticket {
         try {
             deadline = data.getString("deadline");
         } catch (JSONException ex){
-            deadline = "";
             System.out.println(ex.getMessage() + "");
         }
         try {
@@ -138,11 +137,14 @@ public class Ticket {
         }
 
         Ticket ticket;
-        if (deadline == "" && state==""){
+        if (deadline.equals("") && state.equals("")){
             ticket =  new Ticket(ID, priority, description, address, floor, room, startTime);
         }
-        else if (deadline==""){
+        else if (deadline.equals("")){
             ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, parseState(state));
+        }
+        else if (state.equals("")){
+            ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, deadline);
         }
         else{
             ticket =  new Ticket(ID, priority, description, address, floor, room, startTime, deadline, parseState(state));
@@ -165,10 +167,10 @@ public class Ticket {
 
 
     public States parseState(String state) {
-        if (state == "not started") return States.NOT_STARTED;
-        else if (state == "in progress") return States.IN_PROGRESS;
-        else if (state == "ready") return States.READY;
-        else if (state == "problem") return States.PROBLEM;
+        if (state.equals("not started")) return States.NOT_STARTED;
+        else if (state.equals("in progress")) return States.IN_PROGRESS;
+        else if (state.equals("ready")) return States.READY;
+        else if (state.equals("problem")) return States.PROBLEM;
         else return States.ON_THE_WAY;
     }
 
