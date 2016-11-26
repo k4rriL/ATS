@@ -1,5 +1,6 @@
 package junction.senseit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Parcelable;
@@ -20,7 +21,7 @@ public class TasksListerActivity extends AppCompatActivity {
 
     private ListView listView;
     private TaskListAdapter listAdapter = null;
-
+    private int m_workerID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,11 @@ public class TasksListerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_lister);
 
+        Intent intent = getIntent();
+        m_workerID = intent.getIntExtra("worker_id", -1);
+
         listView = (ListView) findViewById(R.id.tasks_list);
-        GetTicketsTask task =  new GetTicketsTask();
+        GetTicketsTask task =  new GetTicketsTask(m_workerID);
         task.execute((Void) null);
 
         attachListeners();
@@ -52,17 +56,32 @@ public class TasksListerActivity extends AppCompatActivity {
 
     class GetTicketsTask extends AsyncTask<Void, Void, Boolean> {
 
+        private int nWorkerID;
+        private ProgressDialog progressDialog = null;
         private ArrayList<TicketInformation> arrTicketInformation = null;
+
+        GetTicketsTask(int workerID) {
+
+            nWorkerID = workerID;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = new ProgressDialog(TasksListerActivity.this);
+            progressDialog.setMessage("Retrieving tickets");
+            progressDialog.show();
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
             boolean status = false;
 
-            String data= "";
+            String data;
             try {
 
-                // TODO: Invoke the backend API to get the tickets
+                data = ((BackendConnectionHelper) getApplication()).getTicketsForWorker(nWorkerID);
                 arrTicketInformation = createTicketFromJSON(data);
                 if(arrTicketInformation != null) {
 
@@ -78,6 +97,11 @@ public class TasksListerActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
+
+            if(progressDialog != null && progressDialog.isShowing()) {
+
+                progressDialog.dismiss();
+            }
 
             if (success) {
                 runOnUiThread(new Runnable(){
@@ -103,20 +127,21 @@ public class TasksListerActivity extends AppCompatActivity {
 
         ArrayList<TicketInformation> createTicketFromJSON(String jsonString) throws JSONException {
 
-            ArrayList<TicketInformation> arrTickets = null;
+            ArrayList<TicketInformation> arrTickets;
 
-            int ID = 0;
-            int priority = 0;
-            String description = "";
-            String startTime="";
-            String deadline="";
-            String state="";
-            String address="";
-            String floor="";
-            String room="";
+            int ID;
+            int state;
+            int priority;
 
-            // TODO: Verify the strings with the JSON keys passed from the backend
+            String description;
+            String startTime;
+            String deadline = "";
+            String address = "";
+            String floor = "";
+            String room = "";
+
             JSONObject data = new JSONObject(jsonString);
+            data = data.getJSONObject("worker");
             JSONArray arrTicketJSONObj = data.getJSONArray("tickets");
 
             arrTickets = new ArrayList<>();
@@ -124,22 +149,15 @@ public class TasksListerActivity extends AppCompatActivity {
 
                 try {
 
-                    ID = arrTicketJSONObj.getJSONObject(index).getInt("ID");
+                    ID = arrTicketJSONObj.getJSONObject(index).getInt("id");
                     priority = arrTicketJSONObj.getJSONObject(index).getInt("priority");
                     description = arrTicketJSONObj.getJSONObject(index).getString("description");
-                    startTime = arrTicketJSONObj.getJSONObject(index).getString("startTime");
-                    deadline = arrTicketJSONObj.getJSONObject(index).getString("deadline");
-                    state = arrTicketJSONObj.getJSONObject(index).getString("state");
+                    startTime = arrTicketJSONObj.getJSONObject(index).getString("creation_time");
+                    state = arrTicketJSONObj.getJSONObject(index).getInt("status");
 
                     TicketInformation ticketInformation;
-                    if (deadline.equals("") && state.equals("")){
-                        ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime);
-                    }
-                    else if (deadline.equals("")){
+                    if (deadline.equals("")){
                         ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, parseState(state));
-                    }
-                    else if (state.equals("")){
-                        ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline);
                     }
                     else{
                         ticketInformation =  new TicketInformation(ID, priority, description, address, floor, room, startTime, deadline, parseState(state));
@@ -156,23 +174,23 @@ public class TasksListerActivity extends AppCompatActivity {
             return  arrTickets;
         }
 
-        private TicketInformation.TicketState parseState(String state) {
+        private TicketInformation.TicketState parseState(int state) {
 
             switch (state) {
-                case "not started":
-                    return TicketInformation.TicketState.NOT_STARTED;
+                case 0:
+                    return TicketInformation.TicketState.NOT_ASSIGNED;
 
-                case "in progress":
+                case 1:
                     return TicketInformation.TicketState.IN_PROGRESS;
 
-                case "ready":
-                    return TicketInformation.TicketState.READY;
-
-                case "problem":
+                case 2:
                     return TicketInformation.TicketState.PROBLEM;
 
+                case 3:
+                    return TicketInformation.TicketState.RESOLVED;
+
                 default:
-                    return TicketInformation.TicketState.ON_THE_WAY;
+                    return TicketInformation.TicketState.NOT_ASSIGNED;
             }
         }
     }

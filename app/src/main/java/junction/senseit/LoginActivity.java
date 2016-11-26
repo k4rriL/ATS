@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
         private final String mUsername;
         private final String mPassword;
@@ -171,9 +171,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Integer doInBackground(Void... params) {
 
-            boolean status = true;
+            int nWorkerID = -1;
 
             // Checks if the network connection is available
             if( ((BackendConnectionHelper) getApplication()).isNetworkAvailable() ) {
@@ -182,28 +182,29 @@ public class LoginActivity extends AppCompatActivity {
                 if (((BackendConnectionHelper) getApplication()).initialize()) {
 
                     // Authenticate the user for the first time
-                    status = ((BackendConnectionHelper) getApplication()).authenticateUser(mUsername, mPassword);
+                    nWorkerID = ((BackendConnectionHelper) getApplication()).authenticateUser(mUsername, mPassword);
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Network connection lost", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Failed to connect to backend", Toast.LENGTH_LONG).show();
                 }
             } else {
 
-                Toast.makeText(getApplicationContext(), "Failed to connect to backend", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Network connection lost", Toast.LENGTH_LONG).show();
             }
 
-            return status;
+            return nWorkerID;
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
+        protected void onPostExecute(final Integer nWorkerID) {
 
             mAuthTask = null;
             showProgress(false);
 
-            if (success) {
+            if (nWorkerID != -1) {
 
                 Intent intent = new Intent(LoginActivity.this, TasksListerActivity.class);
+                intent.putExtra("worker_id", nWorkerID);
                 startActivity(intent);
             } else {
 

@@ -32,7 +32,7 @@ public class TicketInformation {
         this.ID=ID;
         this.priority=priority;
         this.description=description;
-        this.state=TicketState.NOT_STARTED;
+        this.state=TicketState.NOT_ASSIGNED;
         this.address=address;
         this.floor=floor;
         this.room=room;
@@ -55,7 +55,7 @@ public class TicketInformation {
         this.ID=ID;
         this.priority=priority;
         this.description=description;
-        this.state= TicketState.NOT_STARTED;
+        this.state= TicketState.NOT_ASSIGNED;
         this.address=address;
         this.floor=floor;
         this.room=room;
@@ -75,7 +75,7 @@ public class TicketInformation {
         this.ID=ID;
         this.priority=priority;
         this.description=description;
-        this.state= TicketState.NOT_STARTED;
+        this.state= TicketState.NOT_ASSIGNED;
         this.address=address;
         this.floor=floor;
         this.room=room;
@@ -171,7 +171,7 @@ public class TicketInformation {
 
     enum TicketState {
 
-        NOT_STARTED(0), READY(1), IN_PROGRESS(2),PROBLEM(3),ON_THE_WAY(4);
+        NOT_ASSIGNED(0), IN_PROGRESS(1),PROBLEM(2),RESOLVED(3);
 
         private int numStateType;
 

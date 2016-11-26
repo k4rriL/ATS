@@ -6,26 +6,22 @@ package junction.senseit;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -35,7 +31,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.net.ssl.HostnameVerifier;
@@ -58,32 +53,17 @@ public class BackendConnectionHelper extends Application {
     /**
      *  These strings store the HTTPS URLs to communicate with the backend
      */
-    private static String post_login_url, get_history_url, post_images_url, gen_img_info_url;
+    private static String post_login_url, get_tickets_url, post_location_url, gen_img_info_url;
 
     /**
      *  Variables to store the backend IP address & port
      */
     private static String m_strBackendIP;
 
-    /**
-     *  The socket factory instance to be used with HTTPS connections
-     *  It will be initialized in the beginning once
-     */
-    private static SSLSocketFactory m_sslSocketFactory = null;
-
-    /**
-     *  Variable that stores the amount of data exchanged with the server
-     *  for different API calls. It is set in different APIs and can be read
-     *  after the API call and can be reset to 0
-     */
-    private long m_dataInBytes = 0;
-
     public boolean initialize() {
 
         formURLsToConnect();
-        getSSLSocketFactory();
-
-        return (m_sslSocketFactory != null);
+        return true;
     }
 
     /**
@@ -100,95 +80,18 @@ public class BackendConnectionHelper extends Application {
     }
 
     /**
-     *  The certificate generated in getSSLSocketFactory contains the hostname.
-     *  We connect and access the backend using IP addresses that is the alternative subject
-     *  in the certificate. But, our certificate does not contain alternative subject so using
-     *  overriding the default host name verification process as such.
-     */
-    static {
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-
-                return hostname.equals(m_strBackendIP);
-            }
-        });
-    }
-
-    /**
-     *  This method constructs the SSL socket after the self-signed server certificate
-     *  verification. This is used to access the backend server using HTTPS requests.
-     */
-    private void getSSLSocketFactory() {
-
-        try {
-
-            // Create instance of the standard certificate class X509
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-
-            // Use the cert.pem certificate of the server (present in the assets folder)
-            // and create a X509 certificate
-            Certificate serverCert;
-            InputStream certInputStream = getResources().getAssets().open("cert.pem");
-            try(BufferedInputStream caInput = new BufferedInputStream(certInputStream)) {
-
-                serverCert = cf.generateCertificate(caInput);
-            }
-
-            // Create a KeyStore containing our server certificate
-            String keyStoreType = KeyStore.getDefaultType();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("serverCert", serverCert);
-
-            // Create a TrustManager that trusts the CAs in our KeyStore (server certificate)
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(keyStore);
-
-            // Create an SSLContext that uses our TrustManager
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, tmf.getTrustManagers(), null);
-            m_sslSocketFactory = context.getSocketFactory();
-
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException | CertificateException e) {
-
-            Log.e(TAG, "Exception while constructing ssl context");
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Parse the backend_ip file and form the URL strings
-     * @return - status of the operation
      */
-    private boolean formURLsToConnect() {
+    private void formURLsToConnect() {
 
-        boolean bStatus = false;
+        m_strBackendIP = getResources().getString(R.string.str_server_ip);
+        String m_strPort = getResources().getString(R.string.str_server_port);
 
-        try {
-            InputStream file = getResources().getAssets().open("backend_ip.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
-            String line = reader.readLine();
-            if (line != null) {
-
-                String[] arrStrings = line.split(":");
-                m_strBackendIP = arrStrings[1];
-                String m_strPort = arrStrings[2];
-                // URLs to be invoked for different functions
-                post_login_url = "https://" + m_strBackendIP + ":" + m_strPort + "/api/authorize";
-                get_history_url = "https://" + m_strBackendIP + ":" + m_strPort + "/api/image";
-                post_images_url = "https://" + m_strBackendIP + ":" + m_strPort + "/api/image/add";
-                gen_img_info_url = "https://" + m_strBackendIP + ":" + m_strPort + "/api/image/";
-
-                bStatus = true;
-            }
-        } catch (IOException ex) {
-
-            Log.e(TAG, "Exception while forming URLs for backend connection.");
-        }
-
-        return bStatus;
+        // URLs to be invoked for different functions
+        post_login_url = "http://" + m_strBackendIP + ":" + m_strPort + "/api/users/token";
+        get_tickets_url = "http://" + m_strBackendIP + ":" + m_strPort + "/api/workers/view/";
+        post_location_url = "http://" + m_strBackendIP + ":" + m_strPort + "/api/workers/updatelocation/";
+        gen_img_info_url = "http://" + m_strBackendIP + ":" + m_strPort + "/api/image/";
     }
 
     /**
@@ -236,7 +139,7 @@ public class BackendConnectionHelper extends Application {
      * @param connection - Connection to the backend
      * @return - String format of the response
      */
-    private String getJSONResponseString(HttpsURLConnection connection) {
+    private String getJSONResponseString(HttpURLConnection connection) {
 
         String respString = null;
 
@@ -263,12 +166,12 @@ public class BackendConnectionHelper extends Application {
         return respString;
     }
 
-    public boolean authenticateUser(String strUsername, String strPassword) {
+    public int authenticateUser(String strUsername, String strPassword) {
 
-        boolean bAuthenticated = false;
+        int nWorkerID = -1;
 
         // Establish HTTP connection and post data
-        HttpsURLConnection urlConnection = null;
+        HttpURLConnection urlConnection = null;
         try {
 
             // Get UTF-8 encoded URL parameters
@@ -279,11 +182,10 @@ public class BackendConnectionHelper extends Application {
 
             // Initialize URL object and Connect to the URL
             URL url = new URL(post_login_url);
-            urlConnection = (HttpsURLConnection) url.openConnection();
-            urlConnection.setSSLSocketFactory(m_sslSocketFactory);
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoOutput(true);
+            urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setFixedLengthStreamingMode(urlParams.getBytes().length);
-            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             urlConnection.setConnectTimeout(30000);
             urlConnection.setRequestMethod("POST");
 
@@ -301,8 +203,9 @@ public class BackendConnectionHelper extends Application {
                 if(jsonRespString != null) {
 
                     JSONObject respObject = new JSONObject(jsonRespString);
-                    ACCESS_TOKEN = respObject.getString("access_token").toLowerCase();
-                    bAuthenticated = true;
+                    respObject = respObject.getJSONObject("data");
+                    ACCESS_TOKEN = respObject.getString("token").toLowerCase();
+                    nWorkerID = respObject.getInt("id");
                 }
             }
         } catch (IOException | JSONException ex) {
@@ -315,22 +218,21 @@ public class BackendConnectionHelper extends Application {
             }
         }
 
-        return bAuthenticated;
+        return nWorkerID;
     }
-    /*
-    public ArrayList<ImageInformation> getHistory() {
 
-        // List of applications to return to the caller
-        ArrayList<ImageInformation> arrImageInfo = null;
+    public String getTicketsForWorker(int workerID) {
+
+        // String containing the json string
+        String strJSONResponse = null;
 
         // Establish HTTP connection and post data
-        HttpsURLConnection urlConnection = null;
+        HttpURLConnection urlConnection = null;
         try {
 
             // Initialize URL object and Connect to the URL
-            URL url = new URL(get_history_url);
-            urlConnection = (HttpsURLConnection) url.openConnection();
-            urlConnection.setSSLSocketFactory(m_sslSocketFactory);
+            URL url = new URL(get_tickets_url + workerID);
+            urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Authorization", "Bearer " + ACCESS_TOKEN);
             urlConnection.setConnectTimeout(30000);
             urlConnection.setChunkedStreamingMode(0);
@@ -343,25 +245,10 @@ public class BackendConnectionHelper extends Application {
                 String jsonRespString = getJSONResponseString(urlConnection);
                 if(jsonRespString != null) {
 
-                    arrImageInfo = new ArrayList<>();
-
-                    // Get the JSON array of objects from the resultant JSON object
-                    JSONObject respObject = new JSONObject(jsonRespString);
-                    JSONArray arrImages = respObject.getJSONArray("images");
-                    for (int index = 0; index < arrImages.length();  index++) {
-
-                        ImageInformation imageInfo = new ImageInformation();
-
-                        imageInfo.imageID = arrImages.getJSONObject(index).getString("id");
-                        imageInfo.imageName = arrImages.getJSONObject(index).getString("name");
-                        imageInfo.operationStatus = arrImages.getJSONObject(index).getString("status");
-                        imageInfo.imageText = arrImages.getJSONObject(index).getString("text");
-
-                        arrImageInfo.add(imageInfo);
-                    }
+                    strJSONResponse = jsonRespString;
                 }
             }
-        } catch (IOException | JSONException ex) {
+        } catch (IOException ex) {
 
             ex.printStackTrace();
         } finally {
@@ -371,9 +258,10 @@ public class BackendConnectionHelper extends Application {
             }
         }
 
-        return arrImageInfo;
+        return strJSONResponse;
     }
 
+    /*
     public ImageInformation getImageInformation(String strImageID) {
 
         ImageInformation imageInfo = null;

@@ -16,6 +16,6 @@
     <string name="str_task_information">Task Information</string>
     <string name="str_area_location">Location Information</string>
     <string name="str_view_on_map">view on map</string>
-    <string name="serverIP">127.0.0.1</string>
-    <string name="serverPort">3000</string>
+    <string name="str_server_ip">127.0.0.1</string>
+    <string name="str_server_port">3000</string>
 </resources>
