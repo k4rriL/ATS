@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 26, 2016 at 03:20 PM
+-- Generation Time: Nov 26, 2016 at 04:26 PM
 -- Server version: 5.7.15-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -66,20 +66,42 @@ CREATE TABLE `tickets` (
 --
 
 CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `created`, `modified`) VALUES
+(2, 'myuser', '$2y$10$yJciRNhPb8XugmRxFsH6z.DetHfwy9dov/KHSGQezaJy3.F8JEgfy', '2016-11-26 14:11:51', '2016-11-26 14:11:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workers`
+--
+
+CREATE TABLE `workers` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `role_id` int(11) NOT NULL
+  `worker_id` int(11) DEFAULT NULL,
+  `role_id` int(11) NOT NULL,
+  `password` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users_tickets`
+-- Table structure for table `workers_tickets`
 --
 
-CREATE TABLE `users_tickets` (
+CREATE TABLE `workers_tickets` (
   `id` int(11) NOT NULL,
   `status` varchar(100) NOT NULL,
   `priority` tinyint(4) NOT NULL,
@@ -87,7 +109,7 @@ CREATE TABLE `users_tickets` (
   `resolved_time` timestamp NULL DEFAULT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ticket_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL
+  `worker_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -119,17 +141,23 @@ ALTER TABLE `tickets`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `workers`
+--
+ALTER TABLE `workers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `boss_id` (`user_id`),
+  ADD KEY `boss_id` (`worker_id`),
   ADD KEY `role_id` (`role_id`);
 
 --
--- Indexes for table `users_tickets`
+-- Indexes for table `workers_tickets`
 --
-ALTER TABLE `users_tickets`
+ALTER TABLE `workers_tickets`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ticket_id` (`ticket_id`),
-  ADD KEY `worker_id` (`user_id`);
+  ADD KEY `worker_id` (`worker_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -154,11 +182,16 @@ ALTER TABLE `tickets`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `workers`
+--
+ALTER TABLE `workers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT for table `users_tickets`
+-- AUTO_INCREMENT for table `workers_tickets`
 --
-ALTER TABLE `users_tickets`
+ALTER TABLE `workers_tickets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
@@ -178,17 +211,17 @@ ALTER TABLE `tickets`
   ADD CONSTRAINT `Tickets belongs to an Activity` FOREIGN KEY (`activity_id`) REFERENCES `activities` (`id`);
 
 --
--- Constraints for table `users`
+-- Constraints for table `workers`
 --
-ALTER TABLE `users`
+ALTER TABLE `workers`
   ADD CONSTRAINT `Worker belongs to a role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 
 --
--- Constraints for table `users_tickets`
+-- Constraints for table `workers_tickets`
 --
-ALTER TABLE `users_tickets`
+ALTER TABLE `workers_tickets`
   ADD CONSTRAINT `ticket belongs to many workers` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`),
-  ADD CONSTRAINT `user has many tickets` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `worker has many tickets` FOREIGN KEY (`worker_id`) REFERENCES `workers` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
