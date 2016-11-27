@@ -15,10 +15,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Rakesh on 11/16/2016
- */
-
 class TaskListAdapter extends BaseAdapter {
 
     private Activity parentActivity;
