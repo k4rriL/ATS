@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Nov 26, 2016 at 10:44 PM
+-- Generation Time: Nov 27, 2016 at 11:50 AM
 -- Server version: 5.7.15-0ubuntu0.16.04.1
 -- PHP Version: 7.0.8-0ubuntu0.16.04.3
 
@@ -72,16 +72,17 @@ INSERT INTO `roles` (`id`, `roleName`) VALUES
 CREATE TABLE `tickets` (
   `id` int(11) NOT NULL,
   `activity_id` int(11) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tickets`
 --
 
-INSERT INTO `tickets` (`id`, `activity_id`, `parent_id`) VALUES
-(2, 1, NULL),
-(3, 2, NULL);
+INSERT INTO `tickets` (`id`, `activity_id`, `parent_id`, `description`) VALUES
+(2, 1, NULL, ''),
+(3, 2, NULL, '');
 
 -- --------------------------------------------------------
 

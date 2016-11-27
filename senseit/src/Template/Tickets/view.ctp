@@ -29,6 +29,10 @@
             <td><?= $this->Number->format($ticket->id) ?></td>
         </tr>
     </table>
+    <div class="row">
+        <h4><?= __('Description') ?></h4>
+        <?= $this->Text->autoParagraph(h($ticket->description)); ?>
+    </div>
     <div class="related">
         <h4><?= __('Related Tickets') ?></h4>
         <?php if (!empty($ticket->child_tickets)): ?>
@@ -37,6 +41,7 @@
                 <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Activity Id') ?></th>
                 <th scope="col"><?= __('Parent Id') ?></th>
+                <th scope="col"><?= __('Description') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($ticket->child_tickets as $childTickets): ?>
@@ -44,6 +49,7 @@
                 <td><?= h($childTickets->id) ?></td>
                 <td><?= h($childTickets->activity_id) ?></td>
                 <td><?= h($childTickets->parent_id) ?></td>
+                <td><?= h($childTickets->description) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Tickets', 'action' => 'view', $childTickets->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Tickets', 'action' => 'edit', $childTickets->id]) ?>
@@ -64,7 +70,6 @@
                 <th scope="col"><?= __('Email') ?></th>
                 <th scope="col"><?= __('Worker Id') ?></th>
                 <th scope="col"><?= __('Role Id') ?></th>
-                <th scope="col"><?= __('Password') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($ticket->workers as $workers): ?>
@@ -74,7 +79,6 @@
                 <td><?= h($workers->email) ?></td>
                 <td><?= h($workers->worker_id) ?></td>
                 <td><?= h($workers->role_id) ?></td>
-                <td><?= h($workers->password) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Workers', 'action' => 'view', $workers->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Workers', 'action' => 'edit', $workers->id]) ?>

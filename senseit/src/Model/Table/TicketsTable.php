@@ -70,6 +70,10 @@ class TicketsTable extends Table
             ->integer('id')
             ->allowEmpty('id', 'create');
 
+        $validator
+            ->requirePresence('description', 'create')
+            ->notEmpty('description');
+
         return $validator;
     }
 

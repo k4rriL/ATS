@@ -17,6 +17,7 @@
         <?php
             echo $this->Form->input('activity_id', ['options' => $activities]);
             echo $this->Form->input('parent_id', ['options' => $parentTickets, 'empty' => true]);
+            echo $this->Form->input('description');
             echo $this->Form->input('workers._ids', ['options' => $workers]);
         ?>
     </fieldset>
