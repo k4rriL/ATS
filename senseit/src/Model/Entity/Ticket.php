@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property int $activity_id
  * @property int $parent_id
+ * @property string $description
  *
  * @property \App\Model\Entity\Activity $activity
  * @property \App\Model\Entity\Ticket $parent_ticket

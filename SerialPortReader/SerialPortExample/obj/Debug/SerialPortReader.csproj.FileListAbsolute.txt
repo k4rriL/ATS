@@ -1,0 +1,8 @@
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\bin\Debug\SerialPortExample.exe.config
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\bin\Debug\SerialPortExample.exe
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\bin\Debug\SerialPortExample.pdb
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\obj\Debug\SerialPortReader.csprojResolveAssemblyReference.cache
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\obj\Debug\SerialPortExample.Properties.Resources.resources
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\obj\Debug\SerialPortReader.csproj.GenerateResource.Cache
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\obj\Debug\SerialPortExample.exe
+C:\Users\Klaudia\Documents\Visual Studio 2012\Projects\SerialPortExample\SerialPortExample\obj\Debug\SerialPortExample.pdb
